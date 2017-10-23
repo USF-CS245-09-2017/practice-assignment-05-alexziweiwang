@@ -51,14 +51,14 @@ public class BSTree {
 		if (adding.getData().compareTo((String) node.getData()) > 0) {
 			if (node.getRight() != null) {
 				insert(adding, node.getRight());
-			} else {
+			} else { // no node on the right
 				node.setRight(adding);
 				return;
 			}
-		} else {
+		} else { /*the data to add <= that of current node*/
 			if (node.getLeft() != null) {
 				insert(adding, node.getLeft());
-			} else {
+			} else { // no node on the left
 				node.setLeft(adding);
 				return;
 			}
@@ -110,7 +110,7 @@ public class BSTree {
 	public void delete(String content) {
 		delete(content, root);
 		if (root == null) {
-			root = new Node();
+			root = new Node(); //empty the tree by updating the root
 		}
 
 	}
@@ -124,30 +124,43 @@ public class BSTree {
 	 *            node to be compared or to delete(if found)
 	 */
 	private void delete(String content, Node node) {
-		if (node.getData().compareTo(content) == 0) {
-			if (node == root) {
-				if (node.getLeft() == null) {
+		if (node.getData().compareTo(content) == 0) { /*found and delete*/
+			if (node == root) { /*deleting the current root!*/
+				if(node.getLeft() == null && node.getRight() == null){
+					/*being the only item in the tree*/
+					root = null;			
+				}
+				else if (node.getLeft() == null &&node.getRight()!=null) {
+					/*no left node but has right node*/
 					root = node.getRight();
-				} else if (node.getRight() == null) {
+				} else if (node.getRight() == null &&node.getLeft()!= null) {
+					/*no right node but has left node*/
 					root = node.getLeft();
 				} else {
+					/*has both left and right node*/
 					node.getLeft().setRight(node.getRight());
 					node.getRight().setLeft(node.getLeft());
-					root = node.getLeft();
+					root = node.getLeft();/*update to a new root*/
 				}
+				return;
 			}
 
+			/*when node is not root*/
 			if (node.getLeft() != null && node.getRight() != null) {
+				/*has both left and right node*/
 				node.getLeft().setRight(node.getRight());
 				node.getRight().setLeft(node.getLeft());
 			} else if (node.getLeft() == null && node.getRight() != null) {
+				/*only has right node*/
 				node.getRight().setLeft(null);
 			} else if (node.getRight() == null && node.getLeft() != null) {
+				/*only has left node*/
 				node.getLeft().setRight(null);
 			}
 
 		}
 
+		/*not the current node, change to leaf nodes*/
 		else if (node.getData().compareTo(content) > 0) {
 			if (node.getData().compareTo(content) > 0 && node.getLeft() != null) {
 				delete(content, node.getLeft());
@@ -216,6 +229,7 @@ public class BSTree {
 		}
 
 		inOrderStr = inOrderStr.concat(node.getData() + " ");
+		
 		if (node.getRight() != null) {
 			visitTree(node.getRight());
 		}
