@@ -139,10 +139,10 @@ public class BSTree {
 				} else { //
 					//has both left and right node
 				
-					if (replacing.getRight() != null){
+					if (replacing.getRight() != null){//reconnect right sub-tree
 						replacing.getRight().setRight(node.getRight());
 					}
-					else{
+					else{//connect its parent's subtree
 						replacing.setRight(node.getRight());
 					}
 					parent.setLeft(replacing);
