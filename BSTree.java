@@ -108,11 +108,7 @@ public class BSTree {
 	 *            data of node which is to be deleted
 	 */
 	public void delete(String content) {
-		delete(content, root);
-		if (root == null) {
-			root = new Node(); //empty the tree by updating the root
-		}
-
+		delete(content, root, root);
 	}
 
 	/**
@@ -123,55 +119,95 @@ public class BSTree {
 	 * @param node
 	 *            node to be compared or to delete(if found)
 	 */
-	private void delete(String content, Node node) {
+	private void delete(String content, Node node, Node parent) {
+		
 		if (node.getData().compareTo(content) == 0) { /*found and delete*/
-			if (node == root) { /*deleting the current root!*/
+			Node replacing;
+			replacing =successor(node);
+			if (node == root) { //deleting the current root!
+				
 				if(node.getLeft() == null && node.getRight() == null){
-					/*being the only item in the tree*/
-					root = null;			
+					//was the only item in the tree
+					root = new Node();			
 				}
 				else if (node.getLeft() == null &&node.getRight()!=null) {
-					/*no left node but has right node*/
+					//no left node but has right node
 					root = node.getRight();
 				} else if (node.getRight() == null &&node.getLeft()!= null) {
-					/*no right node but has left node*/
+					//no right node but has left node
 					root = node.getLeft();
-				} else {
-					/*has both left and right node*/
-					node.getLeft().setRight(node.getRight());
-					node.getRight().setLeft(node.getLeft());
-					root = node.getLeft();/*update to a new root*/
+				} else { //
+					//has both left and right node
+				
+					if (replacing.getRight() != null){
+						replacing.getRight().setRight(node.getRight());
+					}
+					else{
+						replacing.setRight(node.getRight());
+					}
+					parent.setLeft(replacing);
+					root = node.getLeft();
+				
 				}
 				return;
 			}
-
-			/*when node is not root*/
+			
+			//when node is not root
 			if (node.getLeft() != null && node.getRight() != null) {
-				/*has both left and right node*/
-				node.getLeft().setRight(node.getRight());
-				node.getRight().setLeft(node.getLeft());
+				//has both left and right node
+			
+				if (replacing.getRight() != null){
+					replacing.getRight().setRight(node.getRight());
+				}
+				else{
+					replacing.setRight(node.getRight());
+				}
+				
 			} else if (node.getLeft() == null && node.getRight() != null) {
-				/*only has right node*/
-				node.getRight().setLeft(null);
+				//only has right children
+				parent.setRight(node.getRight());
 			} else if (node.getRight() == null && node.getLeft() != null) {
-				/*only has left node*/
-				node.getLeft().setRight(null);
+				//only has left children
+				parent.setLeft(node.getLeft());
+			}
+			else{
+				if(node == parent.getLeft()){
+					parent.setLeft(new Node());
+				}
+				else {
+					parent.setRight(new Node());
+				}
 			}
 
 		}
 
-		/*not the current node, change to leaf nodes*/
+		/*not the current node, change to children nodes*/
 		else if (node.getData().compareTo(content) > 0) {
 			if (node.getData().compareTo(content) > 0 && node.getLeft() != null) {
-				delete(content, node.getLeft());
+				delete(content, node.getLeft(), node);
 			}
 		} else if (node.getData().compareTo(content) < 0) {
 			if (node.getData().compareTo(content) < 0 && node.getRight() != null) {
-				delete(content, node.getRight());
+				delete(content, node.getRight(), node);
 			}
 		}
 	}
 
+	/**
+	 * For deleting a leaf, find the node to replace that leaf
+	 * @param node
+	 * 		given node to be deleted
+	 * @return
+	 * 		a node to replace given node
+	 */
+	private Node successor(Node node){
+		Node curr = node;
+		while (curr.getLeft() !=null){
+			curr = curr.getLeft();
+		}
+		return curr;
+	}
+	
 	/**
 	 * Returns a space-separated copy of the contents stored in the BST in
 	 * pre-order: the contents of the root node, followed by the contents of the
