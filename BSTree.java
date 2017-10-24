@@ -7,9 +7,9 @@
  */
 public class BSTree {
 
-	public Node root;
-	public String preOrderStr;
-	public String inOrderStr;
+	private Node root;
+	private String preOrderStr;
+	private String inOrderStr;
 
 	/**
 	 * Constructor
