@@ -1,7 +1,7 @@
 
 /**
  * BSTree.java
- * 
+ * Binary Search Tree
  * @author Alex Wang
  *
  */
