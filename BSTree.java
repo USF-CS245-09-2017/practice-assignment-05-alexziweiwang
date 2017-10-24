@@ -1,7 +1,7 @@
 
 /**
  * BSTree.java
- * Binary Search Tree
+ * Implementation of Binary Search Tree
  * @author Alex Wang
  *
  */
@@ -44,7 +44,7 @@ public class BSTree {
 	 * 
 	 * @param adding
 	 *            node given to be inserted
-	 * @param parent
+	 * @param node
 	 *            to compare and insert
 	 */
 	private void insert(Node adding, Node node) {
@@ -113,11 +113,12 @@ public class BSTree {
 
 	/**
 	 * Delete a node from the tree
-	 * 
 	 * @param content
-	 *            data of node which is to be deleted
+	 * 		data of node which is to be deleted
 	 * @param node
-	 *            node to be compared or to delete(if found)
+	 * 		node to be compared or to delete(if found)
+	 * @param parent
+	 * 		parent of current node
 	 */
 	private void delete(String content, Node node, Node parent) {
 		
